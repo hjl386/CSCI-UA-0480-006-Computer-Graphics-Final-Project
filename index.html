@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Final Project </title>
+    </head>
+    <body bgcolor=black text=white>
+        <center>
+            <canvas id='canvas1' width=650 height=650></canvas>
+        </center>
+    </body>
+    <script src=M.js></script>
+    <script src=lib2g.js></script>
+    <script src=S.js></script>
+    <script src=drawlib1.js></script>
+    <script src=drawlib2.js></script>
+<!--    <script src=lib5.js></script>-->
+<!--    <script src=noise_shader.js></script>-->
+    
+    <script id='vs_script' type='x-shader/x-vertex'>
+        attribute vec3 aPos, aNor;
+        varying   vec3 vPos, vNor;
+        uniform   mat4 matrix, invMatrix;
+        void main() {
+            vec4 pos = matrix * vec4(aPos, 1.);
+            vec4 nor = vec4(aNor, 0.) * invMatrix;
+
+            gl_Position = pos;
+            vPos = pos.xyz;
+            vNor = nor.xyz;
+        }
+    </script>
+
+    <script id='fs_script' type='x-shader/x-fragment'>
+        varying vec3 vPos, vNor;
+        
+        struct Light{
+            vec3 direction;
+            vec3 color;
+        } lights[1];
+
+        struct Material {
+            vec3 ambient;
+            vec3 diffuse;
+            vec3 specular;
+            float power;
+        };
+        
+        vec3 backgroundColor(vec3 dir){
+            float t = .5 - .5 * dir.y;
+            return mix(vec3(.2,.01, .01), 
+                       vec3(.01,.01,.1), 1. - t * t);
+        }
+        
+        vec3 phong(vec3 N, vec3 E, Material C) {
+            vec3 c = C.ambient * backgroundColor(N) + vec3(C.specular);
+            for(int i = 0; i < 1; i++){
+                vec3 LDir = normalize(lights[i].direction);
+                float d = max(0., dot(N, LDir));         
+                vec3  R = reflect(-LDir, N);
+                float s = pow(max(0., dot(E, R)), C.power);       
+                c += lights[i].color * (d * 
+                                        C.diffuse + 
+                                        s * C.specular 
+                                        * .1*C.power);
+            }
+            return c;
+        }
+
+        void main() {
+            vec3 normal = normalize(vNor);
+            lights[0].direction = vec3(2., 1., 3.);
+            lights[0].color = vec3(2., .5, 1.);
+            Material m1;
+            m1.ambient = vec3(.0, .0, 1.);
+            m1.diffuse = normal;
+            m1.specular = m1.diffuse * 10.;
+            m1.power = 3.;
+            vec3 c = phong(normal, vec3(0.,0.,0), m1);
+            gl_FragColor = vec4(sqrt(c), 1.);
+         }
+    </script>
+    
+<!--
+    <script>
+        canvas1.update = function(g){
+            g.fillStyle = 'green';
+            g.fillRect(0, 0, 650, 650);
+        }
+        
+        draw2DCanvases([canvas1]);
+    </script>
+-->
+    
+    <script>
+        var m = M.identityMatrix();
+        var vs = vs_script.innerHTML, fs = fs_script.innerHTML;
+
+        addTextEditor(fs, function(){ 
+            canvas1.setShaders(vs, this.value);
+        });
+        
+        var obj1, obj2, obj3;
+        gl_start(canvas1, vs, fs, function(time){
+            M.identity(m);
+            
+            M.save(m);
+            M.scale(m, 0.2);
+            const a = [Math.tan(time), Math.tan(time), Math.sin(time)];
+            M.translate(m, a);
+            M.rotateX(m, time * 10);
+            obj1.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.2);
+            const b = [-Math.tan(time), Math.tan(time), Math.sin(time)];
+            M.translate(m, b);
+            M.rotateX(m, time * 10);
+            obj2.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.3);
+            const c = [0, 0, 0];
+            M.translate(m, c);
+            M.rotateX(m, time * 10);
+            obj3.setMatrix(m);
+            M.restore(m);
+          
+        });
+        
+        var scene = new Scene();
+        
+        function flatten(arr){
+            arr = arr.reduce((acc, val) => {
+               return acc.concat(Array.isArray(val) ? 
+                         flatten(val) : val); 
+            }, []);
+            return arr;
+        }
+//        const flatten = arr => arr.reduce((acc, val) =>     acc.concat(Array.isArray(val) ? flatten(val) : val),[]);
+        
+        obj1 = new SceneObject();
+        const a = S.parametricMesh(S.sphere, 25, 50);
+        obj1.setVertices(flatten(a));
+        scene.addObject(obj1);
+        
+        obj2 = new SceneObject();
+        const b = S.parametricMesh(S.sphere, 25, 50);
+        obj2.setVertices(flatten(b));
+        scene.addObject(obj2);
+        
+        obj3 = new SceneObject();
+        const c = S.parametricMesh(S.torus, 4, 16);
+        obj3.setVertices(flatten(c));
+        scene.addObject(obj3);
+        
+        canvas1.scene = scene;
+
+    </script>
+</html>
