@@ -100,34 +100,93 @@
             canvas1.setShaders(vs, this.value);
         });
         
-        var obj1, obj2, obj3;
+        var obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9, obj10, obj11, obj12;
         gl_start(canvas1, vs, fs, function(time){
             M.identity(m);
             
             M.save(m);
-            M.scale(m, 0.2);
+            M.scale(m, 0.16);
             const a = [Math.tan(time), Math.tan(time), Math.sin(time)];
-            M.translate(m, a);
-            M.rotateX(m, time * 10);
+//            M.translate(m, a);
+            M.rotateX(m, time * 2);
             obj1.setMatrix(m);
             M.restore(m);
             
+//            M.save(m);
+//            M.scale(m, 0.2);
+//            const b = [-Math.tan(time), Math.tan(time), Math.sin(time)];
+//            M.translate(m, b);
+//            M.rotateX(m, time * 10);
+//            obj2.setMatrix(m);
+//            M.restore(m);
+            
             M.save(m);
             M.scale(m, 0.2);
-            const b = [-Math.tan(time), Math.tan(time), Math.sin(time)];
-            M.translate(m, b);
-            M.rotateX(m, time * 10);
+            //const c = [0, 0, 0];
+            //M.translate(m, c);
+            M.rotateX(m, time * 2);
             obj2.setMatrix(m);
             M.restore(m);
             
             M.save(m);
             M.scale(m, 0.3);
-            const c = [0, 0, 0];
-            M.translate(m, c);
-            M.rotateX(m, time * 10);
+            M.rotateX(m, time * 2);
             obj3.setMatrix(m);
             M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.4);
+            M.rotateX(m, time * 2);
+            obj4.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.5);
+            M.rotateX(m, time * 2);
+            obj5.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.6);
+            M.rotateX(m, time * 2);
+            obj6.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.7);
+            M.rotateX(m, time * 2);
+            obj7.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.8);
+            M.rotateX(m, time * 2);
+            obj8.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 0.9);
+            M.rotateX(m, time * 2);
+            obj9.setMatrix(m);
+            M.restore(m);
           
+            M.save(m);
+            M.scale(m, 1.0);
+            M.rotateX(m, time * 2);
+            obj10.setMatrix(m);
+            M.restore(m);
+            
+            M.save(m);
+            M.scale(m, 1.1);
+            M.rotateX(m, time * 2);
+            obj11.setMatrix(m);
+            M.restore(m);
+          
+            M.save(m);
+            M.scale(m, 1.2);
+            M.rotateX(m, time * 2);
+            obj12.setMatrix(m);
+            M.restore(m);
         });
         
         var scene = new Scene();
@@ -142,19 +201,69 @@
 //        const flatten = arr => arr.reduce((acc, val) =>     acc.concat(Array.isArray(val) ? flatten(val) : val),[]);
         
         obj1 = new SceneObject();
-        const a = S.parametricMesh(S.sphere, 25, 50);
+        const a = S.parametricMesh(S.sphere, 100, 100);
         obj1.setVertices(flatten(a));
         scene.addObject(obj1);
         
+//        obj2 = new SceneObject();
+//        const b = S.parametricMesh(S.sphere, 50, 50);
+//        obj2.setVertices(flatten(b));
+//        scene.addObject(obj2);
+//        
         obj2 = new SceneObject();
-        const b = S.parametricMesh(S.sphere, 25, 50);
+        const b = S.parametricMesh(S.torus, 64, 64);
         obj2.setVertices(flatten(b));
         scene.addObject(obj2);
         
         obj3 = new SceneObject();
-        const c = S.parametricMesh(S.torus, 4, 16);
+        const c = S.parametricMesh(S.torus, 64, 64);
         obj3.setVertices(flatten(c));
         scene.addObject(obj3);
+        
+        obj4 = new SceneObject();
+        const d = S.parametricMesh(S.torus, 64, 64);
+        obj4.setVertices(flatten(d));
+        scene.addObject(obj4);
+        
+        obj5 = new SceneObject();
+        const e = S.parametricMesh(S.torus, 64, 64);
+        obj5.setVertices(flatten(e));
+        scene.addObject(obj5);
+        
+        obj6 = new SceneObject();
+        const f = S.parametricMesh(S.torus, 64, 64);
+        obj6.setVertices(flatten(f));
+        scene.addObject(obj6);
+        
+        obj7 = new SceneObject();
+        const g = S.parametricMesh(S.torus, 64, 64);
+        obj7.setVertices(flatten(g));
+        scene.addObject(obj7);
+        
+        obj8 = new SceneObject();
+        const h = S.parametricMesh(S.torus, 64, 64);
+        obj8.setVertices(flatten(h));
+        scene.addObject(obj8);
+        
+        obj9 = new SceneObject();
+        const i = S.parametricMesh(S.torus, 64, 64);
+        obj9.setVertices(flatten(i));
+        scene.addObject(obj9);
+        
+        obj10 = new SceneObject();
+        const j = S.parametricMesh(S.torus, 64, 64);
+        obj10.setVertices(flatten(j));
+        scene.addObject(obj10);
+        
+        obj11 = new SceneObject();
+        const k = S.parametricMesh(S.torus, 64, 64);
+        obj11.setVertices(flatten(k));
+        scene.addObject(obj11);
+        
+        obj12 = new SceneObject();
+        const l = S.parametricMesh(S.torus, 64, 64);
+        obj12.setVertices(flatten(l));
+        scene.addObject(obj12);
         
         canvas1.scene = scene;
 
